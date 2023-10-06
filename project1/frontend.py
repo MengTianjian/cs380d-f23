@@ -21,9 +21,9 @@ class FrontendRPCServer:
     ## pair or updating an existing one.
     def put(self, key, value):
         t = time.time()
-        num_servers = len(kvsServers)
         for serverId, rpcHandle in kvsServers.items():
             rpcHandle.put(key, (value, t))
+        return "Success"
         
         # serverId = key % len(kvsServers)
         # return kvsServers[serverId].put(key, value)
