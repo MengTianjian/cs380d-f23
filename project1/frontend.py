@@ -44,11 +44,12 @@ class FrontendRPCServer:
     ## addServer: This function registers a new server with the
     ## serverId to the cluster membership.
     def addServer(self, serverId):
-        kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
-        if len(kvsServers) <= 1:
+        if len(kvsServers) == 0:
+            kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
             return "Success"
         kv_pairs = kvsServers[random.randint(0, len(kvsServers) - 1)].printKVPairs()
         kv_pairs = kv_pairs.split("/n")
+        kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
         for kv_pair in kv_pairs:
             k, v = kv_pair.split(":")
             kvsServers[serverId].put(int(k), (int(v), 0))
