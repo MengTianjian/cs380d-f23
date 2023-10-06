@@ -45,6 +45,8 @@ class FrontendRPCServer:
     ## serverId to the cluster membership.
     def addServer(self, serverId):
         kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
+        if len(kvsServers) <= 1:
+            return "Success"
         kv_pairs = kvsServers[random.randint(0, len(kvsServers) - 1)].printKVPairs()
         kv_pairs = kv_pairs.split("/n")
         for kv_pair in kv_pairs:
