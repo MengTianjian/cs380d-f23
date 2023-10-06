@@ -14,6 +14,7 @@ class KVSRPCServer:
     def put(self, key, value):
         if key not in self.data or value[1] > self.data[key][1]:
             self.data[key] = value
+        return "Success"
         # return "[Server " + str(serverId) + "] Receive a put request: " + "Key = " + str(key) + ", Val = " + str(value)
 
     ## get: Get the value associated with the given key.
