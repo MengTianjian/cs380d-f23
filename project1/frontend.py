@@ -48,7 +48,7 @@ class FrontendRPCServer:
             kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
             return "Success"
         kv_pairs = kvsServers[random.randint(0, len(kvsServers) - 1)].printKVPairs()
-        kv_pairs = kv_pairs.split("/n")
+        kv_pairs = kv_pairs.split("\n")
         kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
         for kv_pair in kv_pairs:
             k, v = kv_pair.split(":")
