@@ -15,14 +15,12 @@ class KVSRPCServer:
         if key not in self.data or value[1] > self.data[key][1]:
             self.data[key] = value
         return "Success"
-        # return "[Server " + str(serverId) + "] Receive a put request: " + "Key = " + str(key) + ", Val = " + str(value)
 
     ## get: Get the value associated with the given key.
     def get(self, key):
         if key not in self.data:
             return "ERR_KEY"
         return self.data[key][0]
-        # return "[Server " + str(serverId) + "] Receive a get request: " + "Key = " + str(key)
 
     ## printKVPairs: Print all the key-value pairs at this server.
     def printKVPairs(self):
@@ -30,11 +28,10 @@ class KVSRPCServer:
         for k, v in self.data.items():
             result.append('{}:{}'.format(k, v[0]))
         return '\n'.join(result)
-        # return "[Server " + str(serverId) + "] Receive a request printing all KV pairs stored in this server"
 
     ## shutdownServer: Terminate the server itself normally.
     def shutdownServer(self):
-        return "[Server " + str(serverId) + "] Receive a request for a normal shutdown"
+        return "Success"
 
     def isAlive(self):
         return True
