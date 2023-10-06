@@ -1,4 +1,4 @@
-FROM sekwonlee/kvs:base
+FROM mengtianjian/dist_sys_project1:base
 
 MAINTAINER Sekwon Lee <sklee@cs.utexas.edu> version: 0.1
 
