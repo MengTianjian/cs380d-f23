@@ -60,8 +60,15 @@ class FrontendRPCServer:
     ## are currently active/alive inside the cluster.
     def listServer(self):
         serverList = []
+        deadServerList = []
         for serverId, rpcHandle in kvsServers.items():
-            serverList.append(serverId)
+            try:
+                if rpcHandle.isAlive():
+                    serverList.append(serverId)
+            except:
+                deadServerList.append(serverId)
+        for serverId in deadServerList:
+            kvsServers.pop(serverId)
         if not serverList:
             return "ERR_NOSERVERS"
         return ", ".join([str(serverId) for serverId in sorted(serverList)])

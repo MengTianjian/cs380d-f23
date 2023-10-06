@@ -36,6 +36,9 @@ class KVSRPCServer:
     def shutdownServer(self):
         return "[Server " + str(serverId) + "] Receive a request for a normal shutdown"
 
+    def isAlive(self):
+        return True
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = '''To be added.''')
 
