@@ -1,6 +1,7 @@
+import http
+import random
 import time
 from threading import Lock
-import random
 
 import xmlrpc.client
 import xmlrpc.server
@@ -22,14 +23,17 @@ class FrontendRPCServer:
     ## pair or updating an existing one.
     def put(self, key, value):
         t = time.time()
-        # deadServerList = []
+        deadServerList = []
         for serverId in list(kvsServers):
-            # try:
-            kvsServers[serverId].put(key, (value, t))
-            # except:
-            #     deadServerList.append(serverId)
-        # for serverId in deadServerList:
-        #     kvsServers.pop(serverId)
+            while True:
+                try:
+                    kvsServers[serverId].put(key, (value, t))
+                except http.client.CannotSendRequest:
+                    continue
+                else:
+                    deadServerList.append(serverId)
+        for serverId in deadServerList:
+            kvsServers.pop(serverId)
         return "Success"
 
     ## get: This function routes requests from clients to proper
