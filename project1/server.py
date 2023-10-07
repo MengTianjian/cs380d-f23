@@ -12,7 +12,7 @@ class KVSRPCServer:
     ## put: Insert a new-key-value pair or updates an existing
     ## one with new one if the same key already exists.
     def put(self, key, value):
-        if key not in self.data.keys() or value[1] > self.data[key][1]:
+        if key not in list(self.data) or value[1] > self.data[key][1]:
             self.data[key] = value
         return "Success"
 
