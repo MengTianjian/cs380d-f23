@@ -36,7 +36,7 @@ class FrontendRPCServer:
     ## associated with the given key.
     def get(self, key):
         while len(kvsServers) > 0:
-            serverId = random.randint(0, len(kvsServers) - 1)
+            serverId = list(kvsServers.keys())[random.randint(0, len(kvsServers) - 1)]
             try:
                 return kvsServers[serverId].get(key)
             except:
@@ -54,7 +54,7 @@ class FrontendRPCServer:
         if len(kvsServers) == 0:
             kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
             return "Success"
-        kv_pairs = kvsServers[random.randint(0, len(kvsServers) - 1)].printKVPairs()
+        kv_pairs = kvsServers[list(kvsServers.keys())[random.randint(0, len(kvsServers) - 1)]].printKVPairs()
         kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
         if kv_pairs:
             kv_pairs = kv_pairs.split("\n")
