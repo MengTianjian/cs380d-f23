@@ -1,4 +1,5 @@
 import time
+from threading import Lock
 import random
 
 import xmlrpc.client
@@ -20,15 +21,16 @@ class FrontendRPCServer:
     ## servers that are responsible for inserting a new key-value
     ## pair or updating an existing one.
     def put(self, key, value):
-        t = time.time()
-        deadServerList = []
-        for serverId in list(kvsServers):
-            try:
-                kvsServers[serverId].put(key, (value, t))
-            except:
-                deadServerList.append(serverId)
-        for serverId in deadServerList:
-            kvsServers.pop(serverId)
+        with Lock():
+            t = time.time()
+            deadServerList = []
+            for serverId in list(kvsServers):
+                try:
+                    kvsServers[serverId].put(key, (value, t))
+                except:
+                    deadServerList.append(serverId)
+            for serverId in deadServerList:
+                kvsServers.pop(serverId)
         return "Success"
 
     ## get: This function routes requests from clients to proper
