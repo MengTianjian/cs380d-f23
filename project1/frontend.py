@@ -23,24 +23,16 @@ class FrontendRPCServer:
     ## pair or updating an existing one.
     def put(self, key, value):
         t = time.time()
-        deadServerList = []
         for serverId in list(kvsServers):
             while True:
                 try:
                     kvsServers[serverId].put(key, (value, t))
                     break
                 except ConnectionRefusedError:
-                    deadServerList.append(serverId)
+                    kvsServers.pop(serverId)
                     break
                 except:
                     continue
-                # except http.client.HTTPException:
-                #     continue
-                # else:
-                #     deadServerList.append(serverId)
-                #     break
-        for serverId in deadServerList:
-            kvsServers.pop(serverId)
         return "Success"
 
     ## get: This function routes requests from clients to proper
@@ -61,7 +53,13 @@ class FrontendRPCServer:
     ## printKVPairs: This function routes requests to servers
     ## matched with the given serverIds.
     def printKVPairs(self, serverId):
-        return kvsServers[serverId].printKVPairs()
+        while serverId in kvsServers:
+            try:
+                return kvsServers[serverId].printKVPairs()
+            except ConnectionRefusedError:
+                kvsServers.pop(serverId)
+                return "ERR_NOEXIST"
+        return "ERR_NOEXIST"
 
     ## addServer: This function registers a new server with the
     ## serverId to the cluster membership.
@@ -71,7 +69,7 @@ class FrontendRPCServer:
             return "Success"
         kv_pairs = kvsServers[list(kvsServers)[random.randint(0, len(kvsServers) - 1)]].printKVPairs()
         kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
-        if kv_pairs:
+        if kv_pairs and kv_pairs != "ERR_NOEXIST":
             kv_pairs = kv_pairs.split("\n")
             for kv_pair in kv_pairs:
                 k, v = kv_pair.split(":")
@@ -82,15 +80,12 @@ class FrontendRPCServer:
     ## are currently active/alive inside the cluster.
     def listServer(self):
         serverList = []
-        deadServerList = []
         for serverId in list(kvsServers):
             try:
                 if kvsServers[serverId].isAlive():
                     serverList.append(serverId)
             except:
-                deadServerList.append(serverId)
-        for serverId in deadServerList:
-            kvsServers.pop(serverId)
+                kvsServers.pop(serverId)
         if not serverList:
             return "ERR_NOSERVERS"
         return ", ".join([str(serverId) for serverId in sorted(serverList)])
@@ -99,6 +94,8 @@ class FrontendRPCServer:
     ## a server matched with the specified serverId to let the corresponding
     ## server terminate normally.
     def shutdownServer(self, serverId):
+        if serverId not in kvsServers:
+            return "Success"
         result = kvsServers[serverId].shutdownServer()
         kvsServers.pop(serverId)
         return result
