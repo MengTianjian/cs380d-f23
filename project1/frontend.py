@@ -22,9 +22,9 @@ class FrontendRPCServer:
     def put(self, key, value):
         t = time.time()
         deadServerList = []
-        for serverId, rpcHandle in kvsServers.items():
+        for serverId in list(kvsServers):
             try:
-                rpcHandle.put(key, (value, t))
+                kvsServers[serverId].put(key, (value, t))
             except:
                 deadServerList.append(serverId)
         for serverId in deadServerList:
@@ -36,7 +36,7 @@ class FrontendRPCServer:
     ## associated with the given key.
     def get(self, key):
         while len(kvsServers) > 0:
-            serverId = list(kvsServers.keys())[random.randint(0, len(kvsServers) - 1)]
+            serverId = list(kvsServers)[random.randint(0, len(kvsServers) - 1)]
             try:
                 return kvsServers[serverId].get(key)
             except:
@@ -54,7 +54,7 @@ class FrontendRPCServer:
         if len(kvsServers) == 0:
             kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
             return "Success"
-        kv_pairs = kvsServers[list(kvsServers.keys())[random.randint(0, len(kvsServers) - 1)]].printKVPairs()
+        kv_pairs = kvsServers[list(kvsServers)[random.randint(0, len(kvsServers) - 1)]].printKVPairs()
         kvsServers[serverId] = xmlrpc.client.ServerProxy(baseAddr + str(baseServerPort + serverId))
         if kv_pairs:
             kv_pairs = kv_pairs.split("\n")
@@ -68,9 +68,9 @@ class FrontendRPCServer:
     def listServer(self):
         serverList = []
         deadServerList = []
-        for serverId, rpcHandle in kvsServers.items():
+        for serverId in list(kvsServers):
             try:
-                if rpcHandle.isAlive():
+                if kvsServers[serverId].isAlive():
                     serverList.append(serverId)
             except:
                 deadServerList.append(serverId)
