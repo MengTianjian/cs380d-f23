@@ -29,11 +29,14 @@ class FrontendRPCServer:
                 try:
                     kvsServers[serverId].put(key, (value, t))
                     break
-                except http.client.CannotSendRequest:
-                    continue
-                else:
+                except ConnectionRefusedError:
                     deadServerList.append(serverId)
                     break
+                # except http.client.HTTPException:
+                #     continue
+                # else:
+                #     deadServerList.append(serverId)
+                #     break
         for serverId in deadServerList:
             kvsServers.pop(serverId)
         return "Success"
