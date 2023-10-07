@@ -20,7 +20,7 @@ class KVSRPCServer:
     def get(self, key):
         if key not in self.data:
             return "ERR_KEY"
-        return self.data[key][0]
+        return '{}:{}'.format(key, self.data[key][0])
 
     ## printKVPairs: Print all the key-value pairs at this server.
     def printKVPairs(self):
