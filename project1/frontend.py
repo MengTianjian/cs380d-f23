@@ -23,14 +23,14 @@ class FrontendRPCServer:
     def put(self, key, value):
         with Lock():
             t = time.time()
-            deadServerList = []
+            # deadServerList = []
             for serverId in list(kvsServers):
-                try:
-                    kvsServers[serverId].put(key, (value, t))
-                except:
-                    deadServerList.append(serverId)
-            for serverId in deadServerList:
-                kvsServers.pop(serverId)
+                # try:
+                kvsServers[serverId].put(key, (value, t))
+                # except:
+                #     deadServerList.append(serverId)
+            # for serverId in deadServerList:
+            #     kvsServers.pop(serverId)
         return "Success"
 
     ## get: This function routes requests from clients to proper
