@@ -28,10 +28,12 @@ class FrontendRPCServer:
             while True:
                 try:
                     kvsServers[serverId].put(key, (value, t))
+                    break
                 except http.client.CannotSendRequest:
                     continue
                 else:
                     deadServerList.append(serverId)
+                    break
         for serverId in deadServerList:
             kvsServers.pop(serverId)
         return "Success"
