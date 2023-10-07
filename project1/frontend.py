@@ -21,28 +21,27 @@ class FrontendRPCServer:
     ## servers that are responsible for inserting a new key-value
     ## pair or updating an existing one.
     def put(self, key, value):
-        with Lock():
-            t = time.time()
-            # deadServerList = []
-            for serverId in list(kvsServers):
-                # try:
-                kvsServers[serverId].put(key, (value, t))
-                # except:
-                #     deadServerList.append(serverId)
-            # for serverId in deadServerList:
-            #     kvsServers.pop(serverId)
+        t = time.time()
+        # deadServerList = []
+        for serverId in list(kvsServers):
+            # try:
+            kvsServers[serverId].put(key, (value, t))
+            # except:
+            #     deadServerList.append(serverId)
+        # for serverId in deadServerList:
+        #     kvsServers.pop(serverId)
         return "Success"
 
     ## get: This function routes requests from clients to proper
     ## servers that are responsible for getting the value
     ## associated with the given key.
     def get(self, key):
-        while len(kvsServers) > 0:
+        if len(kvsServers) > 0:
             serverId = list(kvsServers)[random.randint(0, len(kvsServers) - 1)]
-            try:
-                return kvsServers[serverId].get(key)
-            except:
-                kvsServers.pop(serverId)
+            # try:
+            return kvsServers[serverId].get(key)
+            # except:
+            #     kvsServers.pop(serverId)
         return "ERR_NOSERVERS"
 
     ## printKVPairs: This function routes requests to servers
