@@ -47,12 +47,15 @@ class FrontendRPCServer:
     ## servers that are responsible for getting the value
     ## associated with the given key.
     def get(self, key):
-        if len(kvsServers) > 0:
+        while len(kvsServers) > 0:
             serverId = list(kvsServers)[random.randint(0, len(kvsServers) - 1)]
-            # try:
-            return kvsServers[serverId].get(key)
-            # except:
-            #     kvsServers.pop(serverId)
+            try:
+                return kvsServers[serverId].get(key)
+            except ConnectionRefusedError:
+                kvsServers.pop(serverId)
+                continue
+            except:
+                continue
         return "ERR_NOSERVERS"
 
     ## printKVPairs: This function routes requests to servers
