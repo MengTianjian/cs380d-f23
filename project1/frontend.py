@@ -32,6 +32,8 @@ class FrontendRPCServer:
                 except ConnectionRefusedError:
                     deadServerList.append(serverId)
                     break
+                except:
+                    continue
                 # except http.client.HTTPException:
                 #     continue
                 # else:
