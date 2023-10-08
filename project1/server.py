@@ -5,8 +5,8 @@ import xmlrpc.server
 serverId = 0
 basePort = 9000
 
+
 class KVSRPCServer:
-    # TODO: You need to implement details for these functions.
     data = dict()
 
     ## put: Insert a new-key-value pair or updates an existing
@@ -18,23 +18,25 @@ class KVSRPCServer:
 
     ## get: Get the value associated with the given key.
     def get(self, key):
-        if key not in self.data:
+        if key not in list(self.data):
             return "ERR_KEY"
-        return '{}:{}'.format(key, self.data[key][0])
+        return "{}:{}".format(key, self.data[key][0])
 
     ## printKVPairs: Print all the key-value pairs at this server.
     def printKVPairs(self):
         result = []
-        for k, v in self.data.items():
-            result.append('{}:{}'.format(k, v[0]))
-        return '\n'.join(result)
+        for k in list(self.data):
+            result.append("{}:{}".format(k, self.data[k][0]))
+        return "\n".join(result)
 
     ## shutdownServer: Terminate the server itself normally.
     def shutdownServer(self):
-        return "Success"
+        exit()
 
+    ## isAlive: Ping the server and return true if it's alive.
     def isAlive(self):
         return True
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = '''To be added.''')

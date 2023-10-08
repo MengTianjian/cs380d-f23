@@ -1,4 +1,3 @@
-import http
 import random
 import time
 from threading import Lock
@@ -12,12 +11,12 @@ kvsServers = dict()
 baseAddr = "http://localhost:"
 baseServerPort = 9000
 
+
 class SimpleThreadedXMLRPCServer(ThreadingMixIn, SimpleXMLRPCServer):
         pass
 
-class FrontendRPCServer:
-    # TODO: You need to implement details for these functions.
 
+class FrontendRPCServer:
     ## put: This function routes requests from clients to proper
     ## servers that are responsible for inserting a new key-value
     ## pair or updating an existing one.
@@ -94,11 +93,11 @@ class FrontendRPCServer:
     ## a server matched with the specified serverId to let the corresponding
     ## server terminate normally.
     def shutdownServer(self, serverId):
-        if serverId not in kvsServers:
-            return "Success"
-        result = kvsServers[serverId].shutdownServer()
-        kvsServers.pop(serverId)
-        return result
+        if serverId in list(kvsServers):
+            kvsServers[serverId].shutdownServer()
+            kvsServers.pop(serverId)
+        return "Success"
+
 
 server = SimpleThreadedXMLRPCServer(("localhost", 8001))
 server.register_instance(FrontendRPCServer())
