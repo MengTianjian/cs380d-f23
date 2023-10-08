@@ -9,14 +9,14 @@ basePort = 9000
 class MyXMLRPCServer(server.SimpleXMLRPCServer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.register_function(self.shutdown)
+        self.register_function(self.shutdownServer)
 
     # def serve_forever(self):
     #     self.running = 1
     #     while self.running:
     #         self.handle_request()
     
-    def shutdown(self):
+    def shutdownServer(self):
         self._BaseServer__shutdown_request = True
         return 0
 
@@ -45,8 +45,8 @@ class KVSRPCServer:
         return "\n".join(result)
 
     ## shutdownServer: Terminate the server itself normally.
-    def shutdownServer(self):
-        return self.shutdown()
+    # def shutdownServer(self):
+    #     return self.shutdown()
 
     ## isAlive: Ping the server and return true if it's alive.
     def isAlive(self):

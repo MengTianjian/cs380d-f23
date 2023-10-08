@@ -94,7 +94,7 @@ class FrontendRPCServer:
     ## server terminate normally.
     def shutdownServer(self, serverId):
         if serverId in list(kvsServers):
-            kvsServers[serverId].shutdown()
+            kvsServers[serverId].shutdownServer()
             kvsServers.pop(serverId)
         return "Success"
 
