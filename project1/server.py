@@ -31,7 +31,7 @@ class KVSRPCServer:
 
     ## shutdownServer: Terminate the server itself normally.
     def shutdownServer(self):
-        exit()
+        return self.shutdown()
 
     ## isAlive: Ping the server and return true if it's alive.
     def isAlive(self):
