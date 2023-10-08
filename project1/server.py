@@ -6,7 +6,7 @@ serverId = 0
 basePort = 9000
 
 
-class MyXMLRPCServer(server.SimpleXMLRPCServer):
+class MyXMLRPCServer(xmlrpc.server.SimpleXMLRPCServer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.register_function(self.shutdownServer)
