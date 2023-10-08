@@ -6,7 +6,7 @@ serverId = 0
 basePort = 9000
 
 
-class KVSRPCServer:
+class KVSRPCServer(xmlrpc.server.SimpleXMLRPCServer):
     data = dict()
 
     ## put: Insert a new-key-value pair or updates an existing
@@ -48,7 +48,8 @@ if __name__ == '__main__':
 
     serverId = args.serverId[0]
 
-    server = xmlrpc.server.SimpleXMLRPCServer(("localhost", basePort + serverId))
-    server.register_instance(KVSRPCServer())
+    server = KVSRPCServer(("localhost", basePort + serverId))
+    # server = xmlrpc.server.SimpleXMLRPCServer(("localhost", basePort + serverId))
+    # server.register_instance(KVSRPCServer())
 
     server.serve_forever()
