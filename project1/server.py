@@ -6,7 +6,7 @@ serverId = 0
 basePort = 9000
 
 
-class KVSRPCServer(xmlrpc.server.SimpleXMLRPCServer):
+class KVSRPCServer:
     data = dict()
 
     ## put: Insert a new-key-value pair or updates an existing
@@ -31,7 +31,7 @@ class KVSRPCServer(xmlrpc.server.SimpleXMLRPCServer):
 
     ## shutdownServer: Terminate the server itself normally.
     def shutdownServer(self):
-        return self.shutdown()
+        return "Success"
 
     ## isAlive: Ping the server and return true if it's alive.
     def isAlive(self):
@@ -48,8 +48,7 @@ if __name__ == '__main__':
 
     serverId = args.serverId[0]
 
-    server = KVSRPCServer(("localhost", basePort + serverId))
-    # server = xmlrpc.server.SimpleXMLRPCServer(("localhost", basePort + serverId))
-    # server.register_instance(KVSRPCServer())
+    server = xmlrpc.server.SimpleXMLRPCServer(("localhost", basePort + serverId))
+    server.register_instance(KVSRPCServer())
 
     server.serve_forever()
